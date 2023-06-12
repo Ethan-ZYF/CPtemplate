@@ -2,7 +2,7 @@ struct LCA {
     int n;
     std::vector<std::vector<int>> g;
     std::vector<int> sz, top, son, d, f;
-    LCA(int n) : g(n), sz(n), top(n), son(n), d(n), f(n) {}
+    LCA(int n = 0) : g(n), sz(n), top(n), son(n), d(n), f(n) {}
     void add(int a, int b) {
         g[a].push_back(b), g[b].push_back(a);
     }
