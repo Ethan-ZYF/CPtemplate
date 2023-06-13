@@ -1,20 +1,18 @@
 using i128 = __int128;
-
-std::ostream &operator<<(std::ostream &os, i128 n) {
+std::istream &operator>>(std::istream &is, i128 &i) {
+    i64 _i;
+    is >> _i;
+    i = _i;
+    return is;
+}
+std::ostream &operator<<(std::ostream &os, const i128 &i) {
+    if (i == 0) {
+        return os << "0";
+    }
     std::string s;
-    while (n) {
-        s += '0' + n % 10;
-        n /= 10;
+    for (auto j = i; j; j /= 10) {
+        s += '0' + j % 10;
     }
     std::reverse(s.begin(), s.end());
     return os << s;
-}
-
-std::istream &operator>>(std::istream &is, i128 &n) {
-    std::string s;
-    is >> s;
-    n = 0;
-    for (char c : s)
-        n = n * 10 + c - '0';
-    return is;
 }
