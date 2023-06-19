@@ -1,11 +1,11 @@
 template <class Info,
           class Merge = std::plus<Info>>
-struct Node {
+struct Seg {
     int left, right;
     Info info = 0;
-    Node *left_child = nullptr, *right_child = nullptr;
+    Seg *left_child = nullptr, *right_child = nullptr;
 
-    Node(int lb, int rb) {
+    Seg(int lb, int rb) {
         left = lb;
         right = rb;
     }
@@ -13,8 +13,8 @@ struct Node {
     void extend() {
         if (!left_child && left + 1 < right) {
             int t = (left + right) / 2;
-            left_child = new Node(left, t);
-            right_child = new Node(t, right);
+            left_child = new Seg(left, t);
+            right_child = new Seg(t, right);
         }
     }
 

@@ -98,37 +98,27 @@ struct LazySegmentTree {
     }
 };
 
-constexpr i64 inf = 1E18;
-
 struct Tag {
-    int rev;
+    i64 x;
 
-    Tag(int _rev = 0) : rev{_rev} {}
+    Tag(int _x = 0) : x{_x} {}
 
     void apply(const Tag &t) {
-        if (t.rev) {
-            rev ^= 1;
-        }
+        x += t.x;
     }
 };
 
 struct Info {
-    int up;
-    int down;
+    i64 x;
+    int sz;
 
-    Info() : up{0}, down{0} {}
-    Info(int _up, int _down) : up{_up}, down{_down} {}
+    Info(i64 _x = 0, int _sz = 1) : x{_x}, sz{_sz} {}
 
     void apply(const Tag &t) {
-        if (t.rev) {
-            swap(up, down);
-        }
+        x += t.x * sz;
     }
 };
 
 Info operator+(const Info &a, const Info &b) {
-    Info c;
-    c.up = a.up + b.up;
-    c.down = a.down + b.down;
-    return c;
+    return Info{a.x + b.x, a.sz + b.sz};
 }

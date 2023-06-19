@@ -2,8 +2,7 @@
  * @author jiangly
  * https://codeforces.com/profile/jiangly
  */
-template <class Info,
-          class Merge = std::plus<Info>>
+template <class Info, class Merge = std::plus<Info>>
 struct SegmentTree {
     const int n;
     const Merge merge;
