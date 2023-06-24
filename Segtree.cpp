@@ -2,12 +2,11 @@
  * @author jiangly
  * https://codeforces.com/profile/jiangly
  */
-template <class Info, class Merge = std::plus<Info>>
+template <class Info>
 struct SegmentTree {
     const int n;
-    const Merge merge;
     std::vector<Info> info;
-    SegmentTree(int n) : n(n), merge(Merge()), info(4 << std::__lg(n)) {}
+    SegmentTree(int n) : n(n), info(4 << std::__lg(n)) {}
     SegmentTree(std::vector<Info> init) : SegmentTree(init.size()) {
         std::function<void(int, int, int)> build = [&](int p, int l, int r) {
             if (r - l == 1) {
@@ -22,7 +21,7 @@ struct SegmentTree {
         build(1, 0, n);
     }
     void pull(int p) {
-        info[p] = merge(info[2 * p], info[2 * p + 1]);
+        info[p] = info[2 * p] + info[2 * p + 1];
     }
     void modify(int p, int l, int r, int x, const Info &v) {
         if (r - l == 1) {
@@ -48,7 +47,7 @@ struct SegmentTree {
             return info[p];
         }
         int m = (l + r) / 2;
-        return merge(rangeQuery(2 * p, l, m, x, y), rangeQuery(2 * p + 1, m, r, x, y));
+        return rangeQuery(2 * p, l, m, x, y) + rangeQuery(2 * p + 1, m, r, x, y);
     }
     Info rangeQuery(int l, int r) {
         return rangeQuery(1, 0, n, l, r);

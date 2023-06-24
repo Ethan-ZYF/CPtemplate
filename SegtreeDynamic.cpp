@@ -1,8 +1,7 @@
-template <class Info,
-          class Merge = std::plus<Info>>
+template <class Info>
 struct Seg {
     int left, right;
-    Info info = 0;
+    Info info;
     Seg *left_child = nullptr, *right_child = nullptr;
 
     Seg(int lb, int rb) {
@@ -18,15 +17,22 @@ struct Seg {
         }
     }
 
-    void modify(int k, int x) {
-        extend();
-        info += x;
-        if (left_child) {
-            if (k < left_child->right)
-                left_child->modify(k, x);
-            else
-                right_child->modify(k, x);
+    void pull() {
+        info = left_child->info + right_child->info;
+    }
+
+    void modify(int k, const Info& v) {
+        if (left + 1 == right) {
+            info = v;
+            return;
         }
+        extend();
+        if (k < left_child->right) {
+            left_child->modify(k, v);
+        } else {
+            right_child->modify(k, v);
+        }
+        pull();
     }
 
     Info rangeQuery(int lq, int rq) {
