@@ -8,39 +8,30 @@ using i64 = long long;
 #define debug(...)
 #endif
 
-void solve() {
-    int n, k;
-    std::cin >> n >> k;
-    int64_t ans = 0;
-    std::unordered_map<int, std::vector<int>> tp, fp;
-    tp[0].push_back(0);
-    fp[0].push_back(0);
-    for (int i = 0, t = 0, f = 0; i < n; i++) {
-        int x;
-        std::cin >> x;
-        for (; x && x % 2 == 0; x /= 2, t++) {
+class Solution {
+   public:
+    int makeTheIntegerZero(int num1, int num2) {
+        for (int times = 1; times <= 100000; times++) {
+            long long x = (long long)num1 - (long long)times * num2;
+            if (x <= 0) {
+                if (num2 >= 0)
+                    break;
+                else
+                    continue;
+            }
+            long long temp = 0;
+            while (x) {
+                if (x % 2 == 1) temp++;
+                x /= 2;
+            }
+            if (temp <= times) return times;
         }
-        for (; x && x % 5 == 0; x /= 5, f++) {
-        }
-        ans += std::max(
-            std::upper_bound(tp[t - k].begin(), tp[t - k].end(), f - k) - tp[t - k].begin(),
-            std::upper_bound(fp[f - k].begin(), fp[f - k].end(), t - k) - fp[f - k].begin());
-        tp[t].push_back(f);
-        fp[f].push_back(t);
+        return -1;
     }
-    std::cout << ans << "\n";
-}
+};
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int T = 1;
-    cin >> T;
-    for (int Task = 1; Task <= T; Task++) {
-        debug(Task);
-        solve();
-    }
-
-    return 0;
+    int x, y;
+    cin >> x >> y;
+    cout << Solution().makeTheIntegerZero(x, y) << endl;
 }
