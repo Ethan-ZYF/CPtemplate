@@ -120,4 +120,18 @@ struct HLD {
     int rootedLca(int a, int b, int c) {
         return lca(a, b) ^ lca(b, c) ^ lca(c, a);
     }
+
+    std::vector<pair<int, int>> rootedPath(int u, int v) {
+        std::vector<pair<int, int>> res;
+        while (top[u] != top[v]) {
+            res.emplace_back(in[top[u]], in[u] + 1);
+            u = parent[top[u]];
+        }
+        res.emplace_back(in[v], in[u] + 1);
+        return res;
+    }
+
+    std::pair<int, int> rootedSubtree(int u) {
+        return make_pair(in[u], out[u]);
+    }
 };
