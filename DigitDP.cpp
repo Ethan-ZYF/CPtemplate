@@ -1,7 +1,7 @@
 i64 dp(i64 n) {
     auto s = to_string(n);
-    i64 m = s.length(), memo[m][10];
-    memset(memo, -1, sizeof(memo));  // -1 表示没有计算过
+    i64 m = s.length();
+    vector<vector<i64>> memo(m, vector<i64>(10, -1));
     function<i64(int, int, bool, bool)> f = [&](int i, int last, bool is_limit, bool is_num) -> i64 {
         if (i == m)
             return is_num;  // is_num 为 true 表示得到了一个合法数字

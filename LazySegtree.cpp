@@ -4,14 +4,28 @@
  */
 template <class Info, class Tag>
 struct LazySegmentTree {
-    const int n;
+    int n;
     std::vector<Info> info;
     std::vector<Tag> tag;
-    LazySegmentTree(int n) : n(n), info(4 << std::__lg(n)), tag(4 << std::__lg(n)) {}
-    LazySegmentTree(std::vector<Info> init) : LazySegmentTree(init.size()) {
+    LazySegmentTree() : n(0) {}
+    LazySegmentTree(int n_, Info v_ = Info()) {
+        init(n_, v_);
+    }
+    template <class T>
+    LazySegmentTree(std::vector<T> init_) {
+        init(init_);
+    }
+    void init(int n_, Info v_ = Info()) {
+        init(std::vector(n_, v_));
+    }
+    template <class T>
+    void init(std::vector<T> init_) {
+        n = init_.size();
+        info.assign(4 << std::__lg(n), Info());
+        tag.assign(4 << std::__lg(n), Tag());
         std::function<void(int, int, int)> build = [&](int p, int l, int r) {
             if (r - l == 1) {
-                info[p] = init[l];
+                info[p] = init_[l];
                 return;
             }
             int m = (l + r) / 2;
@@ -81,44 +95,68 @@ struct LazySegmentTree {
     void rangeApply(int l, int r, const Tag &v) {
         return rangeApply(1, 0, n, l, r, v);
     }
-
-    int search(int p, int l, int r, int x, int y, i64 v) {
-        if (l >= y || r <= x) return y;
-        if (info[p].min >= v) return y;
-        if (r - l == 1) return l;
+    template <class F>
+    int findFirst(int p, int l, int r, int x, int y, F pred) {
+        if (l >= y || r <= x || !pred(info[p])) {
+            return -1;
+        }
+        if (r - l == 1) {
+            return l;
+        }
         int m = (l + r) / 2;
         push(p);
-        int res = search(2 * p, l, m, x, y, v);
-        if (res == y) res = search(2 * p + 1, m, r, x, y, v);
+        int res = findFirst(2 * p, l, m, x, y, pred);
+        if (res == -1) {
+            res = findFirst(2 * p + 1, m, r, x, y, pred);
+        }
         return res;
     }
-
-    int search(int l, int r, i64 v) {
-        return search(1, 0, n, l, r, v);
+    template <class F>
+    int findFirst(int l, int r, F pred) {
+        return findFirst(1, 0, n, l, r, pred);
+    }
+    template <class F>
+    int findLast(int p, int l, int r, int x, int y, F pred) {
+        if (l >= y || r <= x || !pred(info[p])) {
+            return -1;
+        }
+        if (r - l == 1) {
+            return l;
+        }
+        int m = (l + r) / 2;
+        push(p);
+        int res = findLast(2 * p + 1, m, r, x, y, pred);
+        if (res == -1) {
+            res = findLast(2 * p, l, m, x, y, pred);
+        }
+        return res;
+    }
+    template <class F>
+    int findLast(int l, int r, F pred) {
+        return findLast(1, 0, n, l, r, pred);
     }
 };
 
 struct Tag {
-    i64 x;
-
-    Tag(int _x = 0) : x{_x} {}
-
-    void apply(const Tag &t) {
-        x += t.x;
+    i64 a = 0, b = 0;
+    void apply(Tag t) {
+        a = std::min(a, b + t.a);
+        b += t.b;
     }
 };
+
+int k;
 
 struct Info {
-    i64 x;
-    int sz;
-
-    Info(i64 _x = 0, int _sz = 1) : x{_x}, sz{_sz} {}
-
-    void apply(const Tag &t) {
-        x += t.x * sz;
+    i64 x = 0;
+    void apply(Tag t) {
+        x += t.a;
+        if (x < 0) {
+            x = (x % k + k) % k;
+        }
+        x += t.b - t.a;
     }
 };
-
-Info operator+(const Info &a, const Info &b) {
-    return Info{a.x + b.x, a.sz + b.sz};
+Info operator+(Info a, Info b) {
+    return {a.x + b.x};
 }
