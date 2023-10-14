@@ -1,3 +1,4 @@
+constexpr int inf = 1E9;
 template <class T>
 struct MaxFlow {
     struct _Edge {

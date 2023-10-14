@@ -1,20 +1,9 @@
-/*
- * @author jiangly
- * https://codeforces.com/profile/jiangly
- */
-template <typename T>
+template <typename T = int>
 struct Fenwick {
     int n;
     std::vector<T> a;
 
-    Fenwick(int n = 0) {
-        init(n);
-    }
-
-    void init(int n) {
-        this->n = n;
-        a.assign(n, T());
-    }
+    Fenwick(int n = 0) : n(n), a(n, T()) {}
 
     void add(int x, T v) {
         for (int i = x + 1; i <= n; i += i & -i) {
