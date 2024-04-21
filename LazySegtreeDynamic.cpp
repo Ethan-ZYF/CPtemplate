@@ -1,26 +1,25 @@
 template <class Info, class Tag>
 struct Seg {
-    int left, right;
+    i64 left, right;
     Info info;
     Tag tag;
     Seg *left_child = nullptr, *right_child = nullptr;
 
-    Seg(int lb, int rb) {
+    Seg(i64 lb, i64 rb) {
         left = lb;
         right = rb;
+        info = Info();
+        tag = Tag();
     }
 
     void apply(const Tag& v) {
-        info.sz = right - left;
         info.apply(v);
         tag.apply(v);
     }
 
     void push() {
-        if (left_child) {
-            left_child->apply(tag);
-            right_child->apply(tag);
-        }
+        if (left_child) left_child->apply(tag);
+        if (right_child) right_child->apply(tag);
         tag = Tag();
     }
 
@@ -29,14 +28,12 @@ struct Seg {
     }
 
     void extend() {
-        if (!left_child && left + 1 < right) {
-            int t = (left + right) / 2;
-            left_child = new Seg(left, t);
-            right_child = new Seg(t, right);
-        }
+        i64 mid = (left + right) / 2;
+        if (not left_child) left_child = new Seg(left, mid);
+        if (not right_child) right_child = new Seg(mid, right);
     }
 
-    void modify(int k, const Info& v) {
+    void modify(i64 k, const Info& v) {
         if (left + 1 == right) {
             info = v;
             return;
@@ -51,19 +48,21 @@ struct Seg {
         pull();
     }
 
-    Info rangeQuery(int l, int r) {
+    Info rangeQuery(i64 l, i64 r) {
         if (l >= right || r <= left) {
             return Info();
         }
         if (l <= left && r >= right) {
             return info;
         }
-        extend();
         push();
-        return left_child->rangeQuery(l, r) + right_child->rangeQuery(l, r);
+        Info ans = Info();
+        if (left_child) ans = ans + left_child->rangeQuery(l, r);
+        if (right_child) ans = ans + right_child->rangeQuery(l, r);
+        return ans;
     }
 
-    void rangeApply(int l, int r, const Tag& v) {
+    void rangeApply(i64 l, i64 r, const Tag& v) {
         if (l >= right || r <= left) {
             return;
         }
@@ -71,14 +70,13 @@ struct Seg {
             apply(v);
             return;
         }
-        extend();
         push();
         left_child->rangeApply(l, r, v);
         right_child->rangeApply(l, r, v);
         pull();
     }
 
-    Info query(int k) {
+    Info query(i64 k) {
         return rangeQuery(k, k + 1);
     }
 

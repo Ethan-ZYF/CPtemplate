@@ -1,10 +1,10 @@
-template <class Info>
+template <typename Info>
 struct Seg {
-    int left, right;
+    i64 left, right;
     Info info;
     Seg *left_child = nullptr, *right_child = nullptr;
 
-    Seg(int lb, int rb) {
+    Seg(i64 lb, i64 rb) {
         left = lb;
         right = rb;
     }
@@ -18,29 +18,48 @@ struct Seg {
     }
 
     void pull() {
-        info = left_child->info + right_child->info;
+        info = Info();
+        if (left_child) info = info + left_child->info;
+        if (right_child) info = info + right_child->info;
     }
 
-    void modify(int k, const Info& v) {
+    void modify(i64 k, const Info& v) {
         if (left + 1 == right) {
             info = v;
             return;
         }
-        extend();
-        if (k < left_child->right) {
+        i64 mid = (left + right) / 2;
+        if (k < mid) {
+            if (!left_child) left_child = new Seg(left, mid);
             left_child->modify(k, v);
         } else {
+            if (!right_child) right_child = new Seg(mid, right);
             right_child->modify(k, v);
         }
         pull();
     }
 
-    Info rangeQuery(int lq, int rq) {
+    Info rangeQuery(i64 lq, i64 rq) {
         if (lq <= left && right <= rq)
             return info;
-        if (std::max(left, lq) >= std::min(right, rq))
-            return 0;
-        extend();
-        return left_child->rangeQuery(lq, rq) + right_child->rangeQuery(lq, rq);
+        if (max(left, lq) >= min(right, rq))
+            return Info();
+        Info ans;
+        if (left_child)
+            ans = ans + left_child->rangeQuery(lq, rq);
+        if (right_child)
+            ans = ans + right_child->rangeQuery(lq, rq);
+        return ans;
     }
 };
+
+constexpr i64 INF = 1e9 + 5;
+
+struct Info {
+    i64 x;
+    Info(i64 x = 0) : x(x) {}
+};
+
+Info operator+(const Info& a, const Info& b) {
+    return Info(a.x + b.x);
+}

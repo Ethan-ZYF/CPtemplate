@@ -2,7 +2,7 @@ struct Trie {
     static constexpr int ALPHABET = 26;
 
     struct Node {
-        std::array<Node *, ALPHABET> next;
+        std::array<Node*, ALPHABET> next;
         bool is_end;
         int cnt;
         Node() : next(), is_end(false), cnt(0) {}
@@ -15,16 +15,16 @@ struct Trie {
             }
             assert(false);
         }
-        Node *&operator[](char x) {
+        Node*& operator[](char x) {
             return next[f(x)];
         }
     };
 
-    Node *root;
+    Node* root;
     Trie() : root(new Node()) {}
 
-    void add(const std::string &s) {
-        Node *p = root;
+    void add(const std::string& s) {
+        Node* p = root;
         for (auto x : s) {
             if ((*p)[x] == nullptr) {
                 (*p)[x] = new Node();
@@ -35,8 +35,8 @@ struct Trie {
         p->is_end = true;
     }
 
-    int count(const std::string &s) {
-        Node *p = root;
+    int count(const std::string& s) {
+        Node* p = root;
         for (auto x : s) {
             if ((*p)[x] == nullptr) {
                 return 0;
@@ -46,8 +46,8 @@ struct Trie {
         return p->cnt;
     }
 
-    bool find(const std::string &s) {
-        Node *p = root;
+    bool find(const std::string& s) {
+        Node* p = root;
         for (auto x : s) {
             if ((*p)[x] == nullptr) {
                 return false;
