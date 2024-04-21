@@ -1,4 +1,4 @@
-std::vector<int> GospersHack(int k, int n) {
+std::vector<int> GospersHack(int n, int k) {
     int cur = (1 << k) - 1;
     int limit = (1 << n);
     std::vector<int> res;

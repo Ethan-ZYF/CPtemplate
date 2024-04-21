@@ -35,9 +35,7 @@ struct MLong {
             return Mod;
         }
     }
-    constexpr static void setMod(i64 Mod_) {
-        Mod = Mod_;
-    }
+    constexpr static void setMod(i64 Mod_) { Mod = Mod_; }
     constexpr i64 norm(i64 x) const {
         if (x < 0) {
             x += getMod();
@@ -47,12 +45,8 @@ struct MLong {
         }
         return x;
     }
-    constexpr i64 val() const {
-        return x;
-    }
-    explicit constexpr operator i64() const {
-        return x;
-    }
+    constexpr i64 val() const { return x; }
+    explicit constexpr operator i64() const { return x; }
     constexpr MLong operator-() const {
         MLong res;
         res.x = norm(getMod() - x);
@@ -62,21 +56,19 @@ struct MLong {
         assert(x != 0);
         return power(*this, getMod() - 2);
     }
-    constexpr MLong &operator*=(MLong rhs) & {
+    constexpr MLong& operator*=(MLong rhs) & {
         x = mul(x, rhs.x, getMod());
         return *this;
     }
-    constexpr MLong &operator+=(MLong rhs) & {
+    constexpr MLong& operator+=(MLong rhs) & {
         x = norm(x + rhs.x);
         return *this;
     }
-    constexpr MLong &operator-=(MLong rhs) & {
+    constexpr MLong& operator-=(MLong rhs) & {
         x = norm(x - rhs.x);
         return *this;
     }
-    constexpr MLong &operator/=(MLong rhs) & {
-        return *this *= rhs.inv();
-    }
+    constexpr MLong& operator/=(MLong rhs) & { return *this *= rhs.inv(); }
     friend constexpr MLong operator*(MLong lhs, MLong rhs) {
         MLong res = lhs;
         res *= rhs;
@@ -97,13 +89,14 @@ struct MLong {
         res /= rhs;
         return res;
     }
-    friend constexpr std::istream &operator>>(std::istream &is, MLong &a) {
+    friend constexpr std::istream& operator>>(std::istream& is, MLong& a) {
         i64 v;
         is >> v;
         a = MLong(v);
         return is;
     }
-    friend constexpr std::ostream &operator<<(std::ostream &os, const MLong &a) {
+    friend constexpr std::ostream& operator<<(std::ostream& os,
+                                              const MLong& a) {
         return os << a.val();
     }
     friend constexpr bool operator==(MLong lhs, MLong rhs) {
@@ -131,9 +124,7 @@ struct MInt {
             return Mod;
         }
     }
-    constexpr static void setMod(int Mod_) {
-        Mod = Mod_;
-    }
+    constexpr static void setMod(int Mod_) { Mod = Mod_; }
     constexpr int norm(int x) const {
         if (x < 0) {
             x += getMod();
@@ -143,12 +134,8 @@ struct MInt {
         }
         return x;
     }
-    constexpr int val() const {
-        return x;
-    }
-    explicit constexpr operator int() const {
-        return x;
-    }
+    constexpr int val() const { return x; }
+    explicit constexpr operator int() const { return x; }
     constexpr MInt operator-() const {
         MInt res;
         res.x = norm(getMod() - x);
@@ -158,21 +145,19 @@ struct MInt {
         assert(x != 0);
         return power(*this, getMod() - 2);
     }
-    constexpr MInt &operator*=(MInt rhs) & {
+    constexpr MInt& operator*=(MInt rhs) & {
         x = 1LL * x * rhs.x % getMod();
         return *this;
     }
-    constexpr MInt &operator+=(MInt rhs) & {
+    constexpr MInt& operator+=(MInt rhs) & {
         x = norm(x + rhs.x);
         return *this;
     }
-    constexpr MInt &operator-=(MInt rhs) & {
+    constexpr MInt& operator-=(MInt rhs) & {
         x = norm(x - rhs.x);
         return *this;
     }
-    constexpr MInt &operator/=(MInt rhs) & {
-        return *this *= rhs.inv();
-    }
+    constexpr MInt& operator/=(MInt rhs) & { return *this *= rhs.inv(); }
     friend constexpr MInt operator*(MInt lhs, MInt rhs) {
         MInt res = lhs;
         res *= rhs;
@@ -193,13 +178,13 @@ struct MInt {
         res /= rhs;
         return res;
     }
-    friend constexpr std::istream &operator>>(std::istream &is, MInt &a) {
+    friend constexpr std::istream& operator>>(std::istream& is, MInt& a) {
         i64 v;
         is >> v;
         a = MInt(v);
         return is;
     }
-    friend constexpr std::ostream &operator<<(std::ostream &os, const MInt &a) {
+    friend constexpr std::ostream& operator<<(std::ostream& os, const MInt& a) {
         return os << a.val();
     }
     friend constexpr bool operator==(MInt lhs, MInt rhs) {
@@ -226,12 +211,11 @@ struct Comb {
     std::vector<Z> _inv;
 
     Comb() : n{0}, _fac{1}, _invfac{1}, _inv{0} {}
-    Comb(int n) : Comb() {
-        init(n);
-    }
+    Comb(int n) : Comb() { init(n); }
 
     void init(int m) {
-        if (m <= n) return;
+        if (m <= n)
+            return;
         _fac.resize(m + 1);
         _invfac.resize(m + 1);
         _inv.resize(m + 1);
@@ -248,19 +232,23 @@ struct Comb {
     }
 
     Z fac(int m) {
-        if (m > n) init(2 * m);
+        if (m > n)
+            init(2 * m);
         return _fac[m];
     }
     Z invfac(int m) {
-        if (m > n) init(2 * m);
+        if (m > n)
+            init(2 * m);
         return _invfac[m];
     }
     Z inv(int m) {
-        if (m > n) init(2 * m);
+        if (m > n)
+            init(2 * m);
         return _inv[m];
     }
     Z binom(int n, int m) {
-        if (n < m || m < 0) return 0;
+        if (n < m || m < 0)
+            return 0;
         return fac(n) * invfac(m) * invfac(n - m);
     }
 } comb;

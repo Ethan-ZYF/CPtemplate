@@ -2,12 +2,6 @@
 using namespace std;
 using i64 = long long;
 
-#ifdef LOCAL
-#include "algo/debug.h"
-#else
-#define debug(...)
-#endif
-
 void solve() {
     
 }
@@ -18,7 +12,6 @@ int main() {
     int T = 1;
     // cin >> T;
     for (int Task = 1; Task <= T; Task++) {
-        debug(Task);
         solve();
     }
 

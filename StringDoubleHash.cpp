@@ -1,33 +1,34 @@
-constexpr i64 INF = 1e8;
-constexpr i64 base1 = 131, base2 = 13331;
-constexpr i64 p1 = 1e9 + 7, p2 = 1e9 + 9;
+template <int N>
+struct StringHash {
+    const int base[2] = {13331, 131};
+    const int mod[2] = {1000000007, 1000000009};
+    std::vector<std::array<int, N>> p, h;
 
-struct DoubleStringHash {
-    vector<i64> h1, h2, w1, w2;
-    void init(string s) {
-        int len = s.size();
-        s = " " + s;
-        h1.resize(len + 1), w1.resize(len + 1);
-        h2.resize(len + 1), w2.resize(len + 1);
-        h1[0] = 0, w1[0] = 1;
-        h2[0] = 0, w2[0] = 1;
-        for (int i = 1; i <= len; i++) {
-            h1[i] = (h1[i - 1] * base1 + s[i]) % p1, w1[i] = w1[i - 1] * base1 % p1;
-            h2[i] = (h2[i - 1] * base2 + s[i]) % p2, w2[i] = w2[i - 1] * base2 % p2;
-        }
+    StringHash() = default;
+
+    StringHash(const std::string& s) {
+        int n = s.size() - 1;
+        p.resize(n + 1);
+        h.resize(n + 1);
+        fill(p[0].begin(), p[0].end(), 1);
+        for (int i = 1; i <= n; i++)
+            for (int j = 0; j < N; j++)
+                p[i][j] = 1ll * p[i - 1][j] * base[j] % mod[j];
+        for (int i = 1; i <= n; i++)
+            for (int j = 0; j < N; j++)
+                h[i][j] = (1ll * h[i - 1][j] * base[j] + s[i]) % mod[j];
     }
-    inline i64 get(int l, int r) {
-        i64 h1 = (this->h1[r] - this->h1[l - 1] * w1[r - l + 1] % p1 + p1) % p1;
-        i64 h2 = (this->h2[r] - this->h2[l - 1] * w2[r - l + 1] % p2 + p2) % p2;
-        return h1 * p2 + h2;
+
+    std::array<int, N> query(int l, int r) {
+        assert(r >= l - 1);
+        std::array<int, N> ans;
+        if (l > r)
+            return {0, 0};
+        for (int i = 0; i < N; i++) {
+            ans[i] = (h[r][i] - 1ll * h[l - 1][i] * p[r - l + 1][i] % mod[i] + mod[i]) % mod[i];
+        }
+        return ans;
     }
 };
 
-i64 string_hash(string s) {
-    i64 h1 = 0, h2 = 0;
-    for (char c : s) {
-        h1 = (h1 * base1 + c) % p1;
-        h2 = (h2 * base2 + c) % p2;
-    }
-    return h1 * p2 + h2;
-}
+//sameple StringHash<N> hsh(s);
