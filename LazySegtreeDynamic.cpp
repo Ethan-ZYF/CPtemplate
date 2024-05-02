@@ -18,8 +18,10 @@ struct Seg {
     }
 
     void push() {
-        if (left_child) left_child->apply(tag);
-        if (right_child) right_child->apply(tag);
+        if (left_child)
+            left_child->apply(tag);
+        if (right_child)
+            right_child->apply(tag);
         tag = Tag();
     }
 
@@ -29,8 +31,10 @@ struct Seg {
 
     void extend() {
         i64 mid = (left + right) / 2;
-        if (not left_child) left_child = new Seg(left, mid);
-        if (not right_child) right_child = new Seg(mid, right);
+        if (not left_child)
+            left_child = new Seg(left, mid);
+        if (not right_child)
+            right_child = new Seg(mid, right);
     }
 
     void modify(i64 k, const Info& v) {
@@ -57,8 +61,10 @@ struct Seg {
         }
         push();
         Info ans = Info();
-        if (left_child) ans = ans + left_child->rangeQuery(l, r);
-        if (right_child) ans = ans + right_child->rangeQuery(l, r);
+        if (left_child)
+            ans = ans + left_child->rangeQuery(l, r);
+        if (right_child)
+            ans = ans + right_child->rangeQuery(l, r);
         return ans;
     }
 
@@ -98,6 +104,7 @@ struct Tag {
 struct Info {
     i64 sum;
     int sz;
+
     Info(i64 v = 0, int sz = 1) : sum(v), sz(sz) {}
 
     void apply(const Tag& v) {

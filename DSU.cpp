@@ -2,6 +2,7 @@ struct DSU {
     std::vector<int> f, siz;
 
     DSU() {}
+
     DSU(int n) {
         init(n);
     }

@@ -2,7 +2,7 @@
  * @author jiangly
  * https://codeforces.com/profile/jiangly
  */
-i64 exgcd(i64 a, i64 b, i64 &x, i64 &y) {
+i64 exgcd(i64 a, i64 b, i64& x, i64& y) {
     if (!b) {
         x = 1;
         y = 0;

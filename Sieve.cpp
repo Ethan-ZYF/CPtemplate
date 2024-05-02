@@ -18,18 +18,22 @@ vector<pair<i64, int>> factor(i64 n) {
 struct Sieve {
     int n;
     std::vector<int> f, primes;
+
     Sieve(int n = 1) : n(n), f(n + 1) {
         f[0] = f[1] = -1;
         for (long long i = 2; i <= n; ++i) {
-            if (f[i]) continue;
+            if (f[i])
+                continue;
             primes.push_back(i);
             f[i] = i;
             for (long long j = i * i; j <= n; j += i) {
-                if (!f[j]) f[j] = i;
+                if (!f[j])
+                    f[j] = i;
             }
         }
     }
+
     bool is_prime(int x) {
         return f[x] == x;
     }
-}sieve(1e7);
+} sieve(1e7);

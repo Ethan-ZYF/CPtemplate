@@ -1,6 +1,6 @@
 constexpr int MOD = 1e9 + 7;
 
-vector<vector<i64>> operator*(const vector<vector<i64>> &a, const vector<vector<i64>> &b) {
+vector<vector<i64>> operator*(const vector<vector<i64>>& a, const vector<vector<i64>>& b) {
     int n = a.size();
     vector<vector<i64>> c(n, vector<i64>(n));
     for (i64 i = 0; i < n; i++)

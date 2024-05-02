@@ -19,8 +19,10 @@ struct Seg {
 
     void pull() {
         info = Info();
-        if (left_child) info = info + left_child->info;
-        if (right_child) info = info + right_child->info;
+        if (left_child)
+            info = info + left_child->info;
+        if (right_child)
+            info = info + right_child->info;
     }
 
     void modify(i64 k, const Info& v) {
@@ -30,10 +32,12 @@ struct Seg {
         }
         i64 mid = (left + right) / 2;
         if (k < mid) {
-            if (!left_child) left_child = new Seg(left, mid);
+            if (!left_child)
+                left_child = new Seg(left, mid);
             left_child->modify(k, v);
         } else {
-            if (!right_child) right_child = new Seg(mid, right);
+            if (!right_child)
+                right_child = new Seg(mid, right);
             right_child->modify(k, v);
         }
         pull();
@@ -57,6 +61,7 @@ constexpr i64 INF = 1e9 + 5;
 
 struct Info {
     i64 x;
+
     Info(i64 x = 0) : x(x) {}
 };
 

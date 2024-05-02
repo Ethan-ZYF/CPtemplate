@@ -1,11 +1,13 @@
 using i128 = __int128;
-std::istream &operator>>(std::istream &is, i128 &i) {
+
+std::istream& operator>>(std::istream& is, i128& i) {
     i64 _i;
     is >> _i;
     i = _i;
     return is;
 }
-std::ostream &operator<<(std::ostream &os, const i128 &i) {
+
+std::ostream& operator<<(std::ostream& os, const i128& i) {
     if (i == 0) {
         return os << "0";
     }

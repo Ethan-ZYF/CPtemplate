@@ -5,7 +5,9 @@ struct Trie {
         std::array<Node*, ALPHABET> next;
         bool is_end;
         int cnt;
+
         Node() : next(), is_end(false), cnt(0) {}
+
         constexpr int f(char c) {
             // modify this function and ALPHABET to support more characters
             if (c >= 'a' && c <= 'z') {
@@ -15,12 +17,14 @@ struct Trie {
             }
             assert(false);
         }
+
         Node*& operator[](char x) {
             return next[f(x)];
         }
     };
 
     Node* root;
+
     Trie() : root(new Node()) {}
 
     void add(const std::string& s) {

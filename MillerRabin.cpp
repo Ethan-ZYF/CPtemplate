@@ -1,6 +1,7 @@
 i64 mul(i64 a, i64 b, i64 m) {
     return static_cast<__int128>(a) * b % m;
 }
+
 i64 power(i64 a, i64 b, i64 m) {
     i64 res = 1 % m;
     for (; b; b >>= 1, a = mul(a, a, m))
@@ -8,6 +9,7 @@ i64 power(i64 a, i64 b, i64 m) {
             res = mul(res, a, m);
     return res;
 }
+
 bool isprime(i64 n) {
     if (n < 2)
         return false;
@@ -33,6 +35,7 @@ bool isprime(i64 n) {
     }
     return true;
 }
+
 std::vector<i64> factorize(i64 n) {
     std::vector<i64> p;
     std::function<void(i64)> f = [&](i64 n) {

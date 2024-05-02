@@ -4,10 +4,12 @@
  */
 struct AhoCorasick {
     static constexpr int ALPHABET = 26;
+
     struct Node {
         int len;
         int link;
         std::array<int, ALPHABET> next;
+
         Node() : link{}, next{} {}
     };
 
@@ -28,7 +30,7 @@ struct AhoCorasick {
         return t.size() - 1;
     }
 
-    int add(const std::vector<int> &a) {
+    int add(const std::vector<int>& a) {
         int p = 1;
         for (auto x : a) {
             if (t[p].next[x] == 0) {
@@ -40,7 +42,7 @@ struct AhoCorasick {
         return p;
     }
 
-    int add(const std::string &a, char offset = 'a') {
+    int add(const std::string& a, char offset = 'a') {
         std::vector<int> b(a.size());
         for (int i = 0; i < a.size(); i++) {
             b[i] = a[i] - offset;

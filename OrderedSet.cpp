@@ -1,10 +1,10 @@
 
 #include <bits/extc++.h>
+
 template <class T>
 struct OrderedSet {
     using namespace __gnu_pbds;
-    using Tree = tree<T, null_type, less_equal<T>, rb_tree_tag,
-                      tree_order_statistics_node_update>;
+    using Tree = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
     Tree t;
 
     OrderedSet() {}

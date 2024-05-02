@@ -6,10 +6,13 @@ struct Dijkstra {
     using G = std::vector<std::vector<pit>>;
     G g;
     std::vector<int> parent;
+
     Dijkstra(int n, const T& INF = 1e18) : n(n), g(n), INF(INF), parent(n, -1) {}
+
     void add(int a, int b, T c) {
         g[a].emplace_back(b, c);
     }
+
     std::vector<T> run(int s) {
         std::vector<T> d(n, INF);
         using pti = std::pair<T, int>;
@@ -19,7 +22,8 @@ struct Dijkstra {
         while (q.size()) {
             auto [dist, u] = q.top();
             q.pop();
-            if (dist != d[u]) continue;
+            if (dist != d[u])
+                continue;
             for (auto& [v, w] : g[u]) {
                 T fina = d[u] + w;
                 if (d[v] > fina) {
@@ -31,6 +35,7 @@ struct Dijkstra {
         }
         return d;
     }
+
     std::vector<int> get_path(int t) {
         std::vector<int> path;
         for (; t != -1; t = parent[t]) {
@@ -39,6 +44,7 @@ struct Dijkstra {
         std::reverse(path.begin(), path.end());
         return path;
     }
+
     bool has_path(int t) {
         return parent[t] != -1;
     }

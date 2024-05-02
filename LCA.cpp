@@ -32,9 +32,13 @@ struct LCA {
             }
         }
     }
+
     int kth(int x, int k) {
-        for (; k; k &= k - 1)
+        for (; k; k &= k - 1) {
             x = anc[x][__builtin_ctz(k)];
+            if (x == -1)
+                return -1;
+        }
         return x;
     }
 

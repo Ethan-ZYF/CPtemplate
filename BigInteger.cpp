@@ -9,6 +9,7 @@
 #define MAX 10000  // for strings
 
 using namespace std;
+
 class BigInteger {
    private:
     string number;

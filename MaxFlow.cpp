@@ -1,9 +1,11 @@
 constexpr int inf = 1E9;
+
 template <class T>
 struct MaxFlow {
     struct _Edge {
         int to;
         T cap;
+
         _Edge(int to, T cap) : to(to), cap(cap) {}
     };
 
@@ -13,6 +15,7 @@ struct MaxFlow {
     std::vector<int> cur, h;
 
     MaxFlow() {}
+
     MaxFlow(int n) {
         init(n);
     }
@@ -52,7 +55,7 @@ struct MaxFlow {
             return f;
         }
         auto r = f;
-        for (int &i = cur[u]; i < int(g[u].size()); ++i) {
+        for (int& i = cur[u]; i < int(g[u].size()); ++i) {
             const int j = g[u][i];
             auto [v, c] = e[j];
             if (c > 0 && h[v] == h[u] + 1) {
@@ -67,12 +70,14 @@ struct MaxFlow {
         }
         return f - r;
     }
+
     void addEdge(int u, int v, T c) {
         g[u].push_back(e.size());
         e.emplace_back(v, c);
         g[v].push_back(e.size());
         e.emplace_back(u, 0);
     }
+
     T flow(int s, int t) {
         T ans = 0;
         while (bfs(s, t)) {
@@ -96,6 +101,7 @@ struct MaxFlow {
         T cap;
         T flow;
     };
+
     std::vector<Edge> edges() {
         std::vector<Edge> a;
         for (int i = 0; i < e.size(); i += 2) {

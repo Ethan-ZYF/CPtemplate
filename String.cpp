@@ -9,9 +9,11 @@ std::vector<int> sa_naive(const std::vector<int>& s) {
     std::vector<int> sa(n);
     std::iota(sa.begin(), sa.end(), 0);
     std::sort(sa.begin(), sa.end(), [&](int l, int r) {
-        if (l == r) return false;
+        if (l == r)
+            return false;
         while (l < n && r < n) {
-            if (s[l] != s[r]) return s[l] < s[r];
+            if (s[l] != s[r])
+                return s[l] < s[r];
             l++;
             r++;
         }
@@ -26,7 +28,8 @@ std::vector<int> sa_doubling(const std::vector<int>& s) {
     std::iota(sa.begin(), sa.end(), 0);
     for (int k = 1; k < n; k *= 2) {
         auto cmp = [&](int x, int y) {
-            if (rnk[x] != rnk[y]) return rnk[x] < rnk[y];
+            if (rnk[x] != rnk[y])
+                return rnk[x] < rnk[y];
             int rx = x + k < n ? rnk[x + k] : -1;
             int ry = y + k < n ? rnk[y + k] : -1;
             return rx < ry;
@@ -48,8 +51,10 @@ std::vector<int> sa_doubling(const std::vector<int>& s) {
 template <int THRESHOLD_NAIVE = 10, int THRESHOLD_DOUBLING = 40>
 std::vector<int> sa_is(const std::vector<int>& s, int upper) {
     int n = s.size();
-    if (n == 0) return {};
-    if (n == 1) return {0};
+    if (n == 0)
+        return {};
+    if (n == 1)
+        return {0};
     if (n == 2) {
         if (s[0] < s[1]) {
             return {0, 1};
@@ -79,7 +84,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
     }
     for (int i = 0; i <= upper; i++) {
         sum_s[i] += sum_l[i];
-        if (i < upper) sum_l[i + 1] += sum_s[i];
+        if (i < upper)
+            sum_l[i + 1] += sum_s[i];
     }
 
     auto induce = [&](const std::vector<int>& lms) {
@@ -87,7 +93,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
         std::vector<int> buf(upper + 1);
         std::copy(sum_s.begin(), sum_s.end(), buf.begin());
         for (auto d : lms) {
-            if (d == n) continue;
+            if (d == n)
+                continue;
             sa[buf[s[d]]++] = d;
         }
         std::copy(sum_l.begin(), sum_l.end(), buf.begin());
@@ -128,7 +135,8 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
         std::vector<int> sorted_lms;
         sorted_lms.reserve(m);
         for (int v : sa) {
-            if (lms_map[v] != -1) sorted_lms.push_back(v);
+            if (lms_map[v] != -1)
+                sorted_lms.push_back(v);
         }
         std::vector<int> rec_s(m);
         int rec_upper = 0;
@@ -148,14 +156,15 @@ std::vector<int> sa_is(const std::vector<int>& s, int upper) {
                     l++;
                     r++;
                 }
-                if (l == n || s[l] != s[r]) same = false;
+                if (l == n || s[l] != s[r])
+                    same = false;
             }
-            if (!same) rec_upper++;
+            if (!same)
+                rec_upper++;
             rec_s[lms_map[sorted_lms[i]]] = rec_upper;
         }
 
-        auto rec_sa =
-            sa_is<THRESHOLD_NAIVE, THRESHOLD_DOUBLING>(rec_s, rec_upper);
+        auto rec_sa = sa_is<THRESHOLD_NAIVE, THRESHOLD_DOUBLING>(rec_s, rec_upper);
 
         for (int i = 0; i < m; i++) {
             sorted_lms[i] = lms[rec_sa[i]];
@@ -185,7 +194,8 @@ std::vector<int> suffix_array(const std::vector<T>& s) {
     std::vector<int> s2(n);
     int now = 0;
     for (int i = 0; i < n; i++) {
-        if (i && s[idx[i - 1]] != s[idx[i]]) now++;
+        if (i && s[idx[i - 1]] != s[idx[i]])
+            now++;
         s2[idx[i]] = now;
     }
     return internal::sa_is(s2, now);
@@ -205,8 +215,7 @@ std::vector<int> suffix_array(const std::string& s) {
 // Linear-Time Longest-Common-Prefix Computation in Suffix Arrays and Its
 // Applications
 template <class T>
-std::vector<int> lcp_array(const std::vector<T>& s,
-                           const std::vector<int>& sa) {
+std::vector<int> lcp_array(const std::vector<T>& s, const std::vector<int>& sa) {
     int n = s.size();
     assert(n >= 1);
     std::vector<int> rnk(n);
@@ -216,11 +225,14 @@ std::vector<int> lcp_array(const std::vector<T>& s,
     std::vector<int> lcp(n - 1);
     int h = 0;
     for (int i = 0; i < n; i++) {
-        if (h > 0) h--;
-        if (rnk[i] == 0) continue;
+        if (h > 0)
+            h--;
+        if (rnk[i] == 0)
+            continue;
         int j = sa[rnk[i] - 1];
         for (; j + h < n && i + h < n; h++) {
-            if (s[j + h] != s[i + h]) break;
+            if (s[j + h] != s[i + h])
+                break;
         }
         lcp[rnk[i] - 1] = h;
     }
@@ -243,14 +255,17 @@ std::vector<int> lcp_array(const std::string& s, const std::vector<int>& sa) {
 template <class T>
 std::vector<int> z_algorithm(const std::vector<T>& s) {
     int n = s.size();
-    if (n == 0) return {};
+    if (n == 0)
+        return {};
     std::vector<int> z(n);
     z[0] = 0;
     for (int i = 1, j = 0; i < n; i++) {
         int& k = z[i];
         k = (j + z[j] <= i) ? 0 : std::min(j + z[j] - i, z[i - j]);
-        while (i + k < n && s[k] == s[i + k]) k++;
-        if (j + z[j] < i + z[i]) j = i;
+        while (i + k < n && s[k] == s[i + k])
+            k++;
+        if (j + z[j] < i + z[i])
+            j = i;
     }
     z[0] = n;
     return z;

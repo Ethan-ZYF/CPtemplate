@@ -4,6 +4,7 @@ struct SCC {
     std::vector<std::vector<int>> adj;
 
     SCC() {}
+
     SCC(int n) : n(n), cur(0), cnt(0), adj(n), dfn(n, -1), low(n), bel(n, -1) {}
 
     void addEdge(int u, int v) {

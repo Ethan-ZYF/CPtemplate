@@ -1,4 +1,4 @@
-auto bfs = [&](auto &adj_) {
+auto bfs = [&](auto& adj_) {
     std::vector<int> vis(N, -1);
     vis[0] = 0;
     std::queue<int> q;
