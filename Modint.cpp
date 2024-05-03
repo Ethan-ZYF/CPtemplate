@@ -1,7 +1,3 @@
-/*
- * @author jiangly
- * https://codeforces.com/profile/jiangly
- */
 template <class T>
 constexpr T power(T a, i64 b) {
     T res = 1;
@@ -137,7 +133,7 @@ struct MLong {
 };
 
 template <>
-i64 MLong<0LL>::Mod = 1;
+i64 MLong<0LL>::Mod = i64(1E18) + 9;
 
 template <int P>
 struct MInt {
@@ -254,10 +250,10 @@ struct MInt {
 };
 
 template <>
-int MInt<0>::Mod = 1;
+int MInt<0>::Mod = 998244353;
 
 template <int V, int P>
 constexpr MInt<P> CInv = MInt<P>(V).inv();
 
-constexpr int P = 998244353;
+constexpr int P = 1000000007;
 using Z = MInt<P>;
