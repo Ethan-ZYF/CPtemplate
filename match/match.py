@@ -2,7 +2,6 @@ import subprocess
 from random import *
 
 CC = "g++-13"
-CC_ARGS = "-std=c++20 -O2 -Wall -DLOCAL"
 CUR_PATH = "/".join(__file__.split("/")[:-1])
 MY_CODE_PATH = f"{CUR_PATH}/Zme.cpp"
 AC_CODE_PATH = f"{CUR_PATH}/Zac.cpp"
@@ -19,18 +18,14 @@ def make_input(outfile):
     """
     TODO: Modify this function to randomly generate input for the problem
     """
-    T = 1
-    outfile.write(f"{T}\n")
-    for t in range(T):
-        N = randint(1, 100)
-        outfile.write(f"{N}\n")
-        for _ in range(N):
-            outfile.write(f"{randint(1, N)} {randint(1, N)}\n")
+    MX = 10
+    a, b, c, d = randint(1, MX), randint(1, MX), randint(1, MX), randint(1, MX)
+    print(a, b, c, d, file=outfile)
 
 
 def compile_code():
-    subprocess.run([CC, MY_CODE_PATH, CC_ARGS, MY_BINARY_PATH])
-    subprocess.run([CC, AC_CODE_PATH, CC_ARGS, AC_BINARY_PATH])
+    subprocess.run([CC, MY_CODE_PATH, "-o", MY_BINARY_PATH])
+    subprocess.run([CC, AC_CODE_PATH, "-o", AC_BINARY_PATH])
 
 
 def run_code():
