@@ -8,56 +8,34 @@ using i64 = long long;
 #define debug(...)
 #endif
 
-struct Bipartite {
-    std::vector<std::vector<int>> g;
-    std::vector<int> color;
-
-    Bipartite(int n) : g(n), color(n, -1) {}
-
-    void add(int u, int v) {
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-
-    bool dfs(int u, int c) {
-        color[u] = c;
-        for (auto v : g[u]) {
-            if (color[v] == -1) {
-                if (!dfs(v, c ^ 1))
-                    return false;
-            } else if (color[v] == color[u]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool work() {
-        for (int i = 0; i < g.size(); i++) {
-            if (color[i] == -1) {
-                if (!dfs(i, 0))
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    std::vector<int> get_color() {
-        return color;
-    }
-};
-
 void solve() {
     int n;
     cin >> n;
-    Bipartite b(n);
-    for (int i = 0; i < n; i++) {
-        int x, y;
-        cin >> x >> y;
-        x--, y--;
-        b.add(x, y);
+    vector<int> a(n), b(n);
+    for (auto& x : a)
+        cin >> x;
+    for (int i = 1; i < n; i++) {
+        b[i] = gcd(a[i - 1], a[i]);
     }
-    cout << (b.work() ? "YES" : "NO") << '\n';
+    vector<int> L(n, 1), R(n, 1);
+    for (int i = 1; i < n; i++) {
+        L[i] = L[i - 1] && (b[i] >= b[i - 1]);
+    }
+    for (int i = n - 2; i >= 0; i--) {
+        R[i] = R[i + 1] && (b[i] <= b[i + 1]);
+    }
+    debug(a);
+    debug(b);
+    debug(L);
+    debug(R);
+    // i, b[i - 1], b[i];
+    // L[i - 2] && R[i + 1] && b[i - 2] <= gcd(a[i - 1], a[i + 1]) <= b[i + 1]
+    bool ok = R[1] || L[n - 2] || L[n - 3] && gcd(a[n - 3], a[n - 1]) >= b[n - 3];
+    for (int i = 1; i < n - 2; i++) {
+        ok |= L[i - 1] && R[i + 2] && b[i - 1] <= gcd(a[i - 1], a[i + 1]) && gcd(a[i - 1], a[i + 1]) <= b[i + 2];
+    }
+    debug(ok);
+    cout << (ok ? "YES" : "NO") << '\n';
 }
 
 int main() {

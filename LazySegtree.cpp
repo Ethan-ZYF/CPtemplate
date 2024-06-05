@@ -156,42 +156,26 @@ struct LazySegmentTree {
 };
 
 struct Tag {
-    bool flip = false;
+    i64 add;
 
-    Tag(bool flip_ = false) : flip(flip_) {}
+    Tag(i64 add_ = 0) : add(add_) {}
 
     void apply(Tag t) {
-        flip ^= t.flip;
+        add += t.add;
     }
 };
 
 struct Info {
-    int c0 = 0, c1 = 0, c01 = 0, c10 = 0;
+    i64 x;
+    int sz;
+
+    Info(i64 x_ = 0, int sz_ = 1) : x(x_), sz(sz_) {}
 
     void apply(Tag t) {
-        if (t.flip) {
-            swap(c0, c1);
-            swap(c01, c10);
-        }
+        x += t.add * sz;
     }
 };
 
 Info operator+(Info a, Info b) {
-    int c01 = max(a.c0 + b.c01, a.c01 + b.c1);
-    int c10 = max(a.c1 + b.c10, a.c10 + b.c0);
-    return {a.c0 + b.c0, a.c1 + b.c1, c01, c10};
-}
-
-string to_string(Info info) {
-    return "{" + to_string(info.c0) + ", " + to_string(info.c1) + ", " + to_string(info.c01) + ", " +
-           to_string(info.c10) + "}";
-}
-
-template <class Info, class Tag>
-string to_string(LazySegmentTree<Info, Tag> seg) {
-    string res;
-    for (int i = 0; i < seg.n; i++) {
-        res += to_string(seg.rangeQuery(i, i + 1)) + " ";
-    }
-    return res;
+    return {a.x + b.x, a.sz + b.sz};
 }

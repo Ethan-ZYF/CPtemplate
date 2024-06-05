@@ -18,9 +18,14 @@ def make_input(outfile):
     """
     TODO: Modify this function to randomly generate input for the problem
     """
-    MX = 10
-    a, b, c, d = randint(1, MX), randint(1, MX), randint(1, MX), randint(1, MX)
-    print(a, b, c, d, file=outfile)
+    T = 1
+    N = 5
+    print(T, file=outfile)
+    for _ in range(T):
+        print(N, file=outfile)
+        for _ in range(N):
+            print(randint(1, 10), end=" ", file=outfile)
+        print(file=outfile)
 
 
 def compile_code():

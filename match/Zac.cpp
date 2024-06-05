@@ -8,59 +8,26 @@ using i64 = long long;
 #define debug(...)
 #endif
 
-struct Bipartite {
-    std::vector<std::vector<int>> g;
-    std::vector<int> color;
-
-    Bipartite(int n) : g(n), color(n, -1) {}
-
-    void add(int u, int v) {
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-
-    bool dfs(int u, int c) {
-        color[u] = c;
-        for (auto v : g[u]) {
-            if (color[v] == -1) {
-                if (!dfs(v, c ^ 1))
-                    return false;
-            } else if (color[v] == color[u]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool work() {
-        for (int i = 0; i < g.size(); i++) {
-            if (color[i] == -1) {
-                if (!dfs(i, 0))
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    std::vector<int> get_color() {
-        return color;
-    }
-};
-
 void solve() {
     int n;
     cin >> n;
-    Bipartite b(n);
-    vector<int> cnt(n);
+    vector<int> a(n);
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+
     for (int i = 0; i < n; i++) {
-        int x, y;
-        cin >> x >> y;
-        x--, y--;
-        cnt[x]++, cnt[y]++;
-        b.add(x, y);
+        vector<int> aa = a;
+        aa.erase(aa.begin() + i);
+        vector<int> b(n - 1);
+        for (int j = 1; j < n - 1; j++) {
+            b[j] = gcd(aa[j - 1], aa[j]);
+        }
+        if(is_sorted(b.begin(), b.end())) {
+            cout << "YES\n";
+            return;
+        }
     }
-    int mx = *max_element(cnt.begin(), cnt.end());
-    cout << (b.work() and mx <= 2 ? "YES" : "NO") << '\n';
+    cout << "NO\n";
 }
 
 int main() {
