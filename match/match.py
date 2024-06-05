@@ -18,19 +18,16 @@ def make_input(outfile):
     """
     TODO: Modify this function to randomly generate input for the problem
     """
-    T = 1
-    N = 5
-    print(T, file=outfile)
-    for _ in range(T):
-        print(N, file=outfile)
-        for _ in range(N):
-            print(randint(1, 10), end=" ", file=outfile)
-        print(file=outfile)
+    n = 5
+    ls = list(range(1, n + 1))
+    shuffle(ls)
+    print(n, file=outfile)
+    print(*ls, file=outfile)
 
 
 def compile_code():
-    subprocess.run([CC, MY_CODE_PATH, "-o", MY_BINARY_PATH])
-    subprocess.run([CC, AC_CODE_PATH, "-o", AC_BINARY_PATH])
+    subprocess.run([CC, "-std=c++23", "-O2", MY_CODE_PATH, "-o", MY_BINARY_PATH])
+    subprocess.run([CC, "-std=c++23", "-O2", AC_CODE_PATH, "-o", AC_BINARY_PATH])
 
 
 def run_code():
@@ -41,6 +38,8 @@ def run_code():
 def compare_output() -> bool:
     my_output = open(MY_OUTPUT_PATH, "r").read()
     ac_output = open(AC_OUTPUT_PATH, "r").read()
+    my_output = my_output.strip()
+    ac_output = ac_output.strip()
     if my_output == ac_output:
         print("AC")
         return True
