@@ -1,55 +1,46 @@
 struct ChairTree {
-    int n, tot;
-    vector<int> ls, rs, root, sum;
-    ChairTree(){};
+    struct Node {
+        int sum;
+        Node* ls;
+        Node* rs;
 
-    ChairTree(int _n) {
-        init(_n);
+        Node(int sum = 0, Node* ls = nullptr, Node* rs = nullptr) : sum(sum), ls(ls), rs(rs) {}
+    };
+
+    int tot, n, L, R;
+    std::vector<Node*> root;
+
+    ChairTree() : tot(0), n(0), L(0), R(1e9 + 1) {}
+
+    ChairTree(int n_, int L = 0, int R = 1e9 + 1) : tot(0), n(n_), L(L), R(R) {
+        root.resize(n, nullptr);
     }
 
-    void init(int _n) {
-        this->n = _n;
-        int tmp = n * 25;
-        ls.resize(tmp);
-        rs.resize(tmp);
-        sum.resize(tmp);
-        root.resize(n + 5);
-        tot = 0;
-        function<void(int&, int, int)> build = [&](int& u, int l, int r) {
-            u = ++tot;
-            if (l == r)
-                return;
-            int mid = (l + r) >> 1;
-            build(ls[u], l, mid);
-            build(rs[u], mid + 1, r);
-        };
-        build(root[0], 1, n);
-    }
-
-    void apply(int& u, int v, int l, int r, int p) {
-        u = ++tot;
-        ls[u] = ls[v], rs[u] = rs[v], sum[u] = sum[v] + 1;
-        if (l == r)
-            return;
+    void apply(Node*& u, Node* v, int l, int r, int p) {
+        u = new Node(v ? v->sum + 1 : 1, v ? v->ls : nullptr, v ? v->rs : nullptr);
+        if (l + 1 == r) return;
         int mid = (l + r) >> 1;
-        if (p <= mid)
-            apply(ls[u], ls[v], l, mid, p);
+        if (p < mid)
+            apply(u->ls, v ? v->ls : nullptr, l, mid, p);
         else
-            apply(rs[u], rs[v], mid + 1, r, p);
+            apply(u->rs, v ? v->rs : nullptr, mid, r, p);
     }
 
-    int query(int u, int v, int l, int r, int k) {
-        if (l == r)
-            return l;
-        int s = sum[ls[u]] - sum[ls[v]];
+    void apply(int v1, int v2, int p) {
+        apply(root[v1], root[v2], L, R, p);
+    }
+
+    int query(Node* u, Node* v, int l, int r, int k) {
+        if (l + 1 == r) return l;
+        int sl = (u && u->ls ? u->ls->sum : 0) - (v && v->ls ? v->ls->sum : 0);
         int mid = (l + r) >> 1;
-        if (s >= k)
-            return query(ls[u], ls[v], l, mid, k);
+        if (sl >= k)
+            return query(u ? u->ls : nullptr, v ? v->ls : nullptr, l, mid, k);
         else
-            return query(rs[u], rs[v], mid + 1, r, k - s);
+            return query(u ? u->rs : nullptr, v ? v->rs : nullptr, mid, r, k - sl);
     }
 
-    int rangeQuery(int l, int r, int k) {
-        return query(root[r], root[l - 1], 1, n, k);
+    int query(int l, int r, int k) {
+        return query(root[r], root[l], L, R, k);
     }
 };

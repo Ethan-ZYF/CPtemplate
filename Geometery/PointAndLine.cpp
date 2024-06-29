@@ -1,54 +1,62 @@
-/*
- * @author jiangly
- * https://codeforces.com/profile/jiangly
- */
 template <class T>
 struct Point {
     T x;
     T y;
+
     Point(T x_ = 0, T y_ = 0) : x(x_), y(y_) {}
 
     template <class U>
     operator Point<U>() {
         return Point<U>(U(x), U(y));
     }
-    Point &operator+=(Point p) & {
+
+    Point& operator+=(Point p) & {
         x += p.x;
         y += p.y;
         return *this;
     }
-    Point &operator-=(Point p) & {
+
+    Point& operator-=(Point p) & {
         x -= p.x;
         y -= p.y;
         return *this;
     }
-    Point &operator*=(T v) & {
+
+    Point& operator*=(T v) & {
         x *= v;
         y *= v;
         return *this;
     }
+
     Point operator-() const {
         return Point(-x, -y);
     }
+
     friend Point operator+(Point a, Point b) {
         return a += b;
     }
+
     friend Point operator-(Point a, Point b) {
         return a -= b;
     }
+
     friend Point operator*(Point a, T b) {
         return a *= b;
     }
+
     friend Point operator*(T a, Point b) {
         return b *= a;
     }
+
     friend bool operator==(Point a, Point b) {
         return a.x == b.x && a.y == b.y;
     }
-    friend std::istream &operator>>(std::istream &is, Point &p) {
+
+    friend std::istream& operator>>(std::istream& is, Point& p) {
         return is >> p.x >> p.y;
     }
-    friend std::ostream &operator<<(std::ostream &os, Point p) {
+
+    friend std::ostream& operator<<(std::ostream& os, Point p) {
         return os << "(" << p.x << ", " << p.y << ")";
     }
 };
@@ -81,6 +89,7 @@ template <class T>
 struct Line {
     Point<T> a;
     Point<T> b;
+
     Line(Point<T> a_ = Point<T>(), Point<T> b_ = Point<T>()) : a(a_), b(b_) {}
 };
 
@@ -106,7 +115,8 @@ Point<T> lineIntersection(Line<T> l1, Line<T> l2) {
 
 template <class T>
 bool pointOnSegment(Point<T> p, Line<T> l) {
-    return cross(p - l.a, l.b - l.a) == 0 && std::min(l.a.x, l.b.x) <= p.x && p.x <= std::max(l.a.x, l.b.x) && std::min(l.a.y, l.b.y) <= p.y && p.y <= std::max(l.a.y, l.b.y);
+    return cross(p - l.a, l.b - l.a) == 0 && std::min(l.a.x, l.b.x) <= p.x && p.x <= std::max(l.a.x, l.b.x) &&
+           std::min(l.a.y, l.b.y) <= p.y && p.y <= std::max(l.a.y, l.b.y);
 }
 
 template <class T>
@@ -318,6 +328,31 @@ std::vector<Point<T>> hp(std::vector<Line<T>> lines) {
     ps.push_back(lineIntersection(ls[0], ls.back()));
 
     return std::vector(ps.begin(), ps.end());
+}
+
+template <class T>
+void angleSort(std::vector<Point<T>>& p) {
+    std::sort(p.begin(), p.end(), [&](auto a, auto b) {
+        if (a.y == 0 && a.x > 0) {
+            return true;
+        }
+        if (b.y == 0 && b.x > 0) {
+            return false;
+        }
+        if (a.y == 0 && a.x < 0) {
+            return false;
+        }
+        if (b.y == 0 && b.x < 0) {
+            return true;
+        }
+        if (a.y > 0 && b.y < 0) {
+            return true;
+        }
+        if (a.y < 0 && b.y > 0) {
+            return false;
+        }
+        return cross(a, b) > 0;
+    });
 }
 
 using P = Point<i64>;

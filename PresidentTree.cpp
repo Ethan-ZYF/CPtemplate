@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-
 struct persistent_tree {
     struct node;
     using iter = std::vector<node>::iterator;
